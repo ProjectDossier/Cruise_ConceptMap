@@ -1,0 +1,145 @@
+<script>
+<!--Mohammad 2-->
+    $(document).ready(function () {
+})
+</script>
+<div class="search-results__list">
+
+    {% if search_result_list %}
+        <!--<p class="mb-4">Returned <strong>{{ unique_searches }} unique search results</strong> ({{ search_time }}
+            seconds)</p>-->
+        {% for search_result in search_result_list %}
+            {% include "_card.html" %}
+        {% endfor %}
+    {% else %}
+        <p>No search results are available ({{ search_time }} seconds)</p>
+    {% endif %}
+
+    {% if search_result_list.has_other_pages %}
+        <ul class="pagination">
+            {% if search_result_list.has_previous %}
+                <li><a href="{{ request.get_full_path }}&page={{ search_result_list.previous_page_number }}">&laquo;</a>
+                </li>
+            {% else %}
+                <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in search_result_list.paginator.page_range %}
+                {% if search_result_list.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)
+     </span></span></li>
+                {% else %}
+                    <li><a href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if search_result_list.has_next %}
+                <li><a href="{{ request.get_full_path }}&page={{ search_result_list.next_page_number }}">&raquo;</a>
+                </li>
+            {% else %}
+                <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</div>
+
+<script>
+<!--    creat the same with the different view -->
+    function Click_link( title, id, paper_url) {
+        var params = '?title='+ title + '&id='+ id
+         $.ajax({
+          type: 'GET',
+          dataType: 'json',
+          url: "/link-click"+ params,
+        // on success
+        success: function(response) {
+              window.open(paper_url, '_blank').focus();
+              // let a = document.createElement('a');
+              // a.target = '_blank';
+              // a.href = paper_url;
+              // a.click(); // We don't need to remove 'a' from the DOM, because we did not add it
+              console.log(response);
+              console.log("Success");
+
+
+        },
+        // on error
+        error: function(response) {
+            // alert the error if any error occured
+            console.log(response);
+            console.log("Error");
+        }
+    });
+         // window.location.href.split('?')[0]+ "?search_query=" + key;
+
+    }
+    function abstractOpened(id, title) {
+         // fetch(window.location.href.split('?')[0] + '/logShowMore?id=' + id + '&title=' + title);
+         //fetch(window.location.href.split('?')[0] + '?logShowMore=' + id );
+        var params = '?id='+ id + '&title='+ title
+         console.log("test");
+         $.ajax({
+          type: 'GET',
+          dataType: 'json',
+          url: "/show-more"+ params,
+        // on success
+        success: function(response) {
+              console.log(response);
+              console.log("Success");
+
+        },
+        // on error
+        error: function(response) {
+            // alert the error if any error occured
+            console.log(response);
+            console.log("Error");
+        }
+    });
+    }
+</script>
+
+<style>
+    p.title a{
+  font-size:18px!important;
+  color:#background:#ffeaa7!important;
+  font-weight:bold!important;
+  cursor:pointer!important;
+  line-height:19px!important;
+}
+.title {
+  font-size:18px!important;
+  color:##222!important;
+  font-weight:bold!important;
+  line-height:19px!important;
+}
+
+p.subtitle{
+  font-size:14px!important;
+  line-height:1.46!important;
+  color:#006621!important;
+
+}
+
+.card {
+        box-shadow: None !important;
+    }
+
+.card-content {
+        padding: 0 !important;
+    }
+
+.card__text {
+        font-size: 14px !important;
+        line-height: 1.46 !important;
+        color: #222 !important;
+       -webkit-text-size-adjust: 100% !important;
+        font-style: normal !important;
+
+}
+.card__text em {
+        font-size: 14px !important;
+        line-height: 1.46 !important;
+        color: #ffeaa7 !important;
+       -webkit-text-size-adjust: 100% !important;
+        font-style: normal !important;
+
+}
+</style>

@@ -1,0 +1,25 @@
+{% extends '_base_no_header.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="search-box">
+        <div>
+            <img src="{% static 'logo2.png' %}" width="100" height="100">
+            Start your search with something...
+        </div>
+
+        <form id="search_box" method="GET" action="/search">
+            <div class="search-box__input">
+                <input type="search" class="input mr-2" name="search_query" value=""
+                       placeholder="Search" aria-label="Search"/>
+                <button class="button is-primary">Search</button>
+            </div>
+<!--            <input id="search_check" name = "search_check" type="checkbox" > N-CM </label>-->
+<!--            <input id="search_check2" name = "search_check2" type="checkbox"> OP-M </label>-->
+            <input type='hidden' name='source' value="main_search">
+
+        </form>
+    </div>
+    {% include "_footer.html" %}
+
+{% endblock %}

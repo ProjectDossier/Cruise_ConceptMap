@@ -1,0 +1,21 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block title %}
+    Cruise-literature: {{ search_query }}
+{% endblock %}
+
+{% block content %}
+    <div class="search-results">
+
+        <div>
+            {% include "_list.html" %}
+            {% include "_footer.html" %}
+        </div>
+        {% if not without %}
+            <div>
+                {% include "my_concept_map.html" %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

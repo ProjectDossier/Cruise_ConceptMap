@@ -1,0 +1,155 @@
+
+{% load static %}
+<script src="https://unpkg.com/gojs@2.2.14/release/go.js"></script>
+
+<div id="allSampleContent" class="p-4 w-full" > </div>
+  <script src="https://unpkg.com/gojs@2.2.14/extensions/DoubleTreeLayout.js"></script>
+    <script id="code">
+    function init() {
+      // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
+      // For details, see https://gojs.net/latest/intro/buildingObjects.html
+      const $ = go.GraphObject.make;  // for conciseness in defining templates in this function
+      myDiagram =
+        $(go.Diagram, "myDiagramDiv",
+          {
+            layout: $(DoubleTreeLayout,
+              {
+                vertical: true,
+                directionFunction: n => n.data && n.data.dir !== "right"
+              })
+          });
+      // define all of the gradient brushes
+      var graygrad = $(go.Brush, "Linear", { 0: "#F5F5F5", 1: "#ebf0f9" });
+      var bluegrad = $(go.Brush, "Linear", { 0: "#ebf0f9", 1: "#b1c5e7" });
+      //var bluegrad2 = $(go.Brush, "Linear", { 0: "#c4d3ed", 1: "#8aa8db" });
+      // var bluegrad2 = $(go.Brush, "Linear", { 0: "#c4d3ed", 1: "#8aa8db" });
+      // var bluegrad3 = $(go.Brush, "Linear", { 0: "#b0c5e8", 1: "#7699d5" });
+      //var bluegrad3 = $(go.Brush, "Linear", { 0: "#9db6e2", 1: "#638bcf" });
+     // var bluegrad3 = $(go.Brush, "Linear", { 0: "#4e7cca", 1: "#3c6dc3" });
+    var bluegrad2 = $(go.Brush, "Linear", { 0: "#b9dfce", 1: "#a8d7c2" });
+    var bluegrad3 = $(go.Brush, "Linear", { 0: "#50af84", 1: "#489d77" });
+
+      var yellowgrad = $(go.Brush, "Linear", { 0: "#FEC901", 1: "#FEA200" });
+      var lavgrad = $(go.Brush, "Linear", { 0: "#b45f06", 1: "#e69138" });
+
+      var level1 = $(go.Brush, "Linear", { 0: "#ced6e4", 1: "#4b8ce7" });
+      var level2 = $(go.Brush, "Linear", { 0: "#1c64ca", 1: "#1f6fe0" });
+      var level3 = $(go.Brush, "Linear", { 0: "#124387", 1: "#1859b4" });
+
+
+      function showKey(key) {
+          let my_url = window.location.href.split('?')[0]+ "?search_query=" + key;
+          window.open(my_url, "_self");
+
+        }
+      myDiagram.nodeTemplate =
+        $(go.Node, "Auto",
+          { isShadowed: true },
+          { selectionAdorned: false },
+            new go.Binding("location", "", (nothing, elt) => {
+            return new go.Point(elt.data[myLocation.x] * 200,
+              elt.data[myLocation.y] * 200)
+          }),
+        // $("TreeExpanderButton",
+        //   { alignment: go.Spot.Bottom, alignmentFocus: go.Spot.Top },
+        //   { visible: true }),
+
+          // define the node's outer shape
+          $(go.Shape, "RoundedRectangle",
+            { fill: level1, stroke: "#D8D8D8" },  // default fill is gray
+            new go.Binding("fill", "color")),
+          // define the node's text
+          $(go.TextBlock,
+            { margin: 5,
+                font: "bold 13px Helvetica, bold Arial, sans-serif",
+                isMultiline: true,
+                wrap: go.TextBlock.WrapDesiredSize
+            },
+            new go.Binding("text", "key")),
+                {
+              click: function(e, obj) { showKey(obj.part.data.key); },
+              toolTip:  // define a tooltip for each node that displays the color as text
+                    $("ToolTip",
+                      $(go.TextBlock, {
+                          margin: 4 ,
+                          column: 1,
+                          width: 250,
+                          isMultiline: true,
+                          wrap: go.TextBlock.WrapDesiredSize
+                          },
+                        new go.Binding("text", "wikipedia"))
+        )  // end Adornment
+    }
+  );
+
+      myDiagram.linkTemplate =
+          $(go.Link,
+            $(go.Shape),  // the link shape
+            $(go.Shape,   // the arrowhead
+              { toArrow: "OpenTriangle", fill: null })
+        );  // the link shape
+
+        var treeList = []
+        {% for key, nodeList in tax_results.items %}
+            {%  for node in nodeList %}
+                treeList.push({
+                    key: '{{ node.key }}',
+                    dir: '{{ node.dir }}',
+                    parent: '{{ node.parent }}',
+                    wikipedia:'{{node.snippet}}',
+                    color: {{node.color}}
+                })
+            {% endfor %}
+        {% endfor %}
+      // create the model for the double tree; could be eiher TreeModel or GraphLinksModel
+      myDiagram.model = new go.TreeModel(treeList);
+    }
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+
+<div id="sample">
+  <div id="myDiagramDiv" style="background-color: white; border: 0px solid black; width: 100%; height: 700px; position: relative;">
+      <canvas tabindex="0" width="1054" height="498" style="position: absolute; top: 0px; left: 0px; z-index: 2; touch-action: none; width: 1054px; height: 498px;">This text is
+          displayed if your browser does not support the Canvas HTML element.</canvas>
+  </div>
+
+
+<!--<div class="diagram-info">-->
+
+<!--            <div class="parent-info-block">General Concepts </div>-->
+<!--            <div class="main-info-block">Main concept</div>-->
+<!--            <div class="child-info-block">In-depth Concepts</div>-->
+<!--        </div>-->
+<!--<style>-->
+<!--    .diagram-info {-->
+<!--    display: flex;-->
+<!--    text-align: center;-->
+<!--    padding: 16px;-->
+
+<!--}-->
+<!--.diagram-info .main-info-block {-->
+<!--    background-color: #b3b3b3;-->
+<!--    margin-right: 15px;-->
+<!--    padding: 8px;-->
+<!--    width: 200px;-->
+<!--    height: 60px;-->
+<!--    border-radius: 8px;-->
+<!--}-->
+<!--.diagram-info .parent-info-block {-->
+<!--    background-color: #b9dfce;-->
+<!--    margin-right: 15px;-->
+<!--    padding: 8px;-->
+<!--    width: 200px;-->
+<!--    height: 60px;-->
+<!--    border-radius: 8px;-->
+<!--}-->
+<!--.diagram-info .child-info-block {-->
+<!--    background-color: #50af84;-->
+<!--    margin-right: 15px;-->
+<!--    padding: 8px;-->
+<!--    width: 200px;-->
+<!--    height: 60px;-->
+<!--    border-radius: 8px;-->
+<!--}-->
+<!--</style>-->
+<!--</div>-->

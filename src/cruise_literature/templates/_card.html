@@ -1,0 +1,100 @@
+<article class="card mb-4" x-data="{ openAbstract: false, openKeywords: false, showCSOKeywords: false}">
+    <div class="card-content">
+        <p class="title">
+            {% if search_result.url %}
+                 <a href=# onclick="Click_link('{{ search_result.title }}', '{{ search_result.id }}','{{ search_result.url }}');">{{ search_result.title }}</a>
+<!--add on click function: send url -->
+<!--                <a href="{{ search_result.url }}" target="_blank">{{ search_result.title }}</a>-->
+<!--            '{{ search_result.title }}','{{ search_result.url}}'-->
+<!--                <a href=# target="_blank" onclick= Click_link('{{ search_result.title }}','{{ search_result.id }}','{{ search_result.url}}');>{{ search_result.title }}</a>-->
+            {% else %}
+                {{ search_result.title}}
+            {% endif %}
+<!--            <input id="document_check" name = "document_check" type="checkbox" >-->
+             </p>
+       <p class="subtitle">{{ search_result.authors }}, {{ search_result.publication_date }} </p>
+    </div>
+    <div class="card-content">
+        <div class="content">
+            <template x-if="openAbstract">
+                <p class="card__text">{{ search_result.abstract | safe }} <button type="button" class="card__show-more" x-on:click="openAbstract = false">Show less</button></p>
+            </template>
+            <template x-if="!openAbstract" x-cloak>
+                <p class="card__text">{{ search_result.snippet | safe }} <button type="button" id="'{{ search_result.id }}'" class="card__show-more" x-on:click="openAbstract = true;abstractOpened('{{ search_result.id }}', '{{ search_result.title }}');">Show more</button></p>
+            </template>
+<!--            Mohammad: add ajax call : define function based view django ajax function based view -->
+<!--                {%if search_result.CSO_keywords|length < 10 %}-->
+<!--                  <p>-->
+<!--                    {% for keyword in search_result.CSO_keywords2 %}-->
+<!--                        {%if keyword in shown_CSO_keywords %}-->
+<!--                            <a href="{% url 'search_results' %}?search_query={{ keyword | urlencode }}&source=keywords" class="button is-light is-small mb-2 {{ 10|keywords_threshold }}">{{ keyword }}</a>-->
+<!--                          {%endif %}-->
+<!--                     {% endfor %}-->
+<!--                 </p>-->
+<!--                {%else%}-->
+<!--                        {% for keyword in search_result.CSO_keywords|slice:":10"  %}-->
+<!--                         <a href="{% url 'search_results' %}?search_query={{ keyword | urlencode }}&source=keywords" class="button is-light is-small mb-2 {{ 10|keywords_threshold }}">{{ keyword }}</a>-->
+<!--                        {% endfor %}-->
+<!--                {%endif %}-->
+<!--                {% if search_result.keywords_rest|length > 0 %}-->
+<!--                    <template x-if="!showCSOKeywords">-->
+<!--                        <button type="button" class="card__show-more" x-on:click="showCSOKeywords = true">Show more</button>-->
+<!--                    </template>-->
+
+<!--                    <template x-if="showCSOKeywords">-->
+<!--                        <span>-->
+<!--                            {% for keyword in search_result.CSO_keywords %}-->
+<!--                                <a href="{% url 'search_results' %}?search_query={{ keyword | urlencode }}&source=keywords" class="button is-light is-small mb-2 {{ 10|keywords_threshold }}">{{ keyword }}</a>-->
+<!--                            {% endfor %}-->
+<!--                            <button type="button" class="card__show-more" x-on:click="showCSOKeywords = false">Show less</button>-->
+
+<!--                        </span>-->
+<!--                    </template>-->
+<!--                {% endif %}-->
+
+
+         <!--
+            <p>
+                {% for keyword, score in search_result.keywords_snippet.items %}
+                    <a href="{% url 'search_results' %}?search_query={{ keyword | urlencode }}&source=keywords" class="button is-light is-small mb-2 {{ score|keywords_threshold }}">{{ keyword }}</a>
+                {% endfor %}
+
+                {% if search_result.keywords_rest|length > 0 %}
+                    <template x-if="!openKeywords">
+                        <button type="button" class="card__show-more" x-on:click="openKeywords = true">Show more</button>
+                    </template>
+
+                    <template x-if="openKeywords">
+                        <span>
+                            {% for keyword, score in search_result.keywords_rest.items %}
+                                <a href="{% url 'search_results' %}?search_query={{ keyword | urlencode }}&source=keywords" class="button is-light is-small mb-2 {{ score|keywords_threshold }}">{{ keyword }}</a>
+                            {% endfor %}
+                            <button type="button" class="card__show-more" x-on:click="openKeywords = false">Show less</button>
+                        </span>
+                    </template>
+                {% endif %}
+            </p>
+
+            <h6>
+                <template x-if="!showCSOKeywords">
+                    <button type="button" class="card__show-more" x-on:click="showCSOKeywords = true">CSO keywords ▾</button>
+                </template>
+
+                <template x-if="showCSOKeywords">
+                    <button type="button" class="card__show-more" x-on:click="showCSOKeywords = false">CSO keywords ▴</button>
+                </template>
+
+            </h6>
+
+            <template x-if="showCSOKeywords" x-cloak>
+                <p>
+                    {% for keyword in search_result.CSO_keywords %}
+                        <a href="{% url 'search_results' %}?search_query={{ keyword | urlencode }}&source=keywords" class="button is-light is-small mb-2">{{ keyword }}</a>
+                    {% endfor %}
+                </p>
+            </template>
+
+        -->
+        </div>
+      </div>
+</article>

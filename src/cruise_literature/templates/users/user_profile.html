@@ -1,0 +1,24 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <div class="user-profile">
+        <h1 class="title is-1">{{ user.get_full_name }}</h1>
+        <div class="user-profile__text">
+            <p>Username: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>First name: {{ user.first_name }}</p>
+            <p>Last name: {{ user.last_name }}</p>
+            <p>Date of birth: {{ user.date_of_birth }}</p>
+            <p>Location: {{ user.location }}</p>
+            <p>Languages: {{ user.user_languages }}</p>
+            <p>Knowledge areas: {{ user.user_knowledge_areas }}</p>
+            <hr />
+            <p>System preferences</p>
+            <p>Allow personalised logging: {{ user.allow_logging }}</p>
+            <p>Preferred taxonomies: {{ user.preferred_taxonomies }}</p>
+        </div>
+        <a class="button is-info is-small" href="{% url 'edit_user_profile' %}">Edit user</a>
+    </div>
+
+    {% include "_footer.html" %}
+{% endblock %}
